@@ -1,0 +1,24 @@
+<head>
+  <title>hello</title>
+</head>
+
+<body>
+<h1>Welcome to Meteor!</h1>
+
+{{> grid}}
+</body>
+
+<template name="grid">
+  {{#each getGridValues}}
+    {{> node id=_id val=val}}
+  {{/each}}
+
+
+</template>
+
+<template name="node">
+  <div class="node">
+    <button class=ATK id="{{id}}">{{val}}</button>
+  </div>
+</template>
+
