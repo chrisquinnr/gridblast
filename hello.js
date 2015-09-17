@@ -10,7 +10,7 @@ if (Meteor.isClient) {
 
   Template.grid.events({
     'click .ATK': function ( e ) {
-
+      console.log(this);
       if (this.val === 0) {
         return false;
       }
@@ -40,9 +40,12 @@ if (Meteor.isServer) {
     var pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10, pos11, pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20, pos21, pos22, pos23, pos24, pos25;
 
     var id = Random.id();
-    var i = 1;
-    pos1 = gridStore.insert({grid: id, val: 10, index: i});
+    var i = 0;
+    console.log(i);
+    pos1 = gridStore.insert({grid: id, val: 10, index: i++});
+    console.log(i);
     pos2 = gridStore.insert({grid: id, val: 15, index: i++});
+    console.log(i);
     pos3 = gridStore.insert({grid: id, val: 15, index: i++});
     pos4 = gridStore.insert({grid: id, val: 15, index: i++});
     pos5 = gridStore.insert({grid: id, val: 10, index: i++});
@@ -133,9 +136,12 @@ if (Meteor.isServer) {
           }
         }
 
-        gridStore.update({_id: node.id}, node);
+        gridStore.update({_id: node.id}, {$set: {val: node.val}});
       }
-      return gridStore.find({}, {sort:{index: 1}}).fetch();
+
+      var grid = gridStore.find({}, {sort:{index: 1}}).fetch();
+      //console.log(grid);
+      return grid;
     }
   })
 
