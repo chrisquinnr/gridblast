@@ -109,33 +109,29 @@ if (Meteor.isServer) {
 
   Meteor.methods({
     'serverUpdateGridNode': function ( node ) {
-      var newval, newval2;
       if (node) {
-        if(node.val === 0){
+        if(node.val <= 0){
           var deps = gridStore.find({deps:node.id}).fetch();
           if(deps){
             _.each(deps, function(elem){
-              //console.log('reducing dep ' + elem._id + ' by 5');
-              elem.val = elem.val - 5;
-
               if(elem._id !== node.id){
-                gridStore.update({_id: elem._id}, elem);
-              }
-
-              if(elem.val <= 0){
-
-                _.each(elem.deps, function(elem2){
-                  elem2 = elem2.val -5;
-                  if(elem._id !== node.id) {
-                    gridStore.update({_id: elem2._id}, elem2);
-                  }
-                });
-
+                if(elem.val >= 5){
+                  elem.val = elem.val - 5;
+                  gridStore.update({_id: elem._id}, elem);
+                }
+                if(elem.val === 0){
+                  var deps2 = gridStore.find({deps:elem.id}).fetch();
+                  _.each(deps2, function(elem2){
+                    if(elem2._id !== node.id) {
+                      elem2 = elem2.val -5;
+                      gridStore.update({_id: elem2._id}, elem2);
+                    }
+                  });
+                }
               }
             });
           }
         }
-
         gridStore.update({_id: node.id}, {$set: {val: node.val}});
       }
 
